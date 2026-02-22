@@ -24,19 +24,30 @@ class Inventario:
             print("❌ Error: No hay permisos para leer el archivo.")
         except Exception as e:
             print(f"❌ Error inesperado al cargar archivo: {e}")
-
+    def _guardar_en_archivo(self):
+        try:
+            with open(self._archivo, "w", encoding="utf-8") as f:
+                for producto in self._productos:
+                    f.write(producto.to_line())
+            return True
+        except PermissionError:
+            print("❌ Error: No hay permisos para escribir en el archivo.")
+            return False
+        except Exception as e:
+            print(f"❌ Error inesperado al guardar archivo: {e}")
+            return False
 
     def agregar_producto(self, producto):
         if any(p.get_id() == producto.get_id() for p in self._productos):
             return False
         self._productos.append(producto)
-        return True
+        return self._guardar_en_archivo()
 
     def eliminar_producto(self, producto_id: int):
         for producto in self._productos:
             if producto.get_id() == producto_id:
                 self._productos.remove(producto)
-                return True
+                return self._guardar_en_archivo()
         return False
 
     def actualizar_producto(self, producto_id: int, nueva_cantidad=None, nuevo_precio=None):
@@ -46,16 +57,12 @@ class Inventario:
                     producto.set_cantidad(nueva_cantidad)
                 if nuevo_precio is not None:
                     producto.set_precio(nuevo_precio)
-                return True
+                return self._guardar_en_archivo()
         return False
 
     def buscar_por_nombre(self, nombre: str):
         nombre = nombre.lower()
-        return [
-            producto
-            for producto in self._productos
-            if nombre in producto.get_nombre().lower()
-        ]
+        return [p for p in self._productos if nombre in p.get_nombre().lower()]
 
     def listar_productos(self):
         return self._productos
