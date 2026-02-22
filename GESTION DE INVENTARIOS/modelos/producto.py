@@ -33,5 +33,15 @@ class Producto:
             raise ValueError("El precio no puede ser negativo")
         self._precio = precio
 
+    def to_line (self):
+        return f"{self._id},{self._nombre},{self._cantidad},{self._precio}\n"
+    @staticmethod
+    def from_line(linea):
+        partes = linea.strip().split(",")
+        if len(partes) != 4:
+            raise ValueError("Línea corrupta en archivo")
+        producto_id, nombre, cantidad, precio = partes
+        return Producto(producto_id, nombre, int(cantidad), float(precio))
+
     def __str__(self):
         return f"ID: {self._id} | Nombre: {self._nombre} | Cantidad: {self._cantidad} | Precio: ${self._precio:.2f}"
