@@ -3,10 +3,11 @@ from modelos.producto import Producto
 
 
 class Inventario:
-    def __init__(self):
+    def __init__(self, archivo="inventario.txt"):
         self._productos = []
         self._archivo = archivo
-        self.cargar_desde_archivo()
+        self._cargar_desde_archivo()
+
     def _cargar_desde_archivo(self):
         try:
             if not os.path.exists(self._archivo):

@@ -63,7 +63,7 @@ def main():
             resultados = inventario.buscar_por_nombre(nombre)
 
             if resultados:
-                print("\n🔎 Resultados encontrados:")
+                print("\n Resultados encontrados:")
                 for producto in resultados:
                     print(producto)
             else:
